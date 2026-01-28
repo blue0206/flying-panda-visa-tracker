@@ -1,9 +1,12 @@
+import "dotenv/config";
+import { envConfig } from "./core/config.js";
 import express from "express";
 import type { Request, Response } from "express";
 import cors from "cors";
 import { ApiResponse } from "./types/api.js";
 import assignRequestId from "./middlewares/assignRequestId.js";
 import { loggerMiddleware } from "./middlewares/loggerMiddleware.js";
+import { logger } from "./core/logger.js";
 
 const app = express();
 
@@ -23,6 +26,6 @@ app.use("/api/v1/healthcheck", (_req: Request, res: Response) => {
   res.status(200).json(data);
 });
 
-app.listen(8000, async () => {
-  console.log("Server running on port: ", 8000);
+app.listen(envConfig.PORT, async () => {
+  logger.info(`Server running on port: ${envConfig.PORT}`);
 });
