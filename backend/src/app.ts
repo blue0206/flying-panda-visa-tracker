@@ -3,10 +3,12 @@ import type { Request, Response } from "express";
 import cors from "cors";
 import { ApiResponse } from "./types/api.js";
 import assignRequestId from "./middlewares/assignRequestId.js";
+import { loggerMiddleware } from "./middlewares/loggerMiddleware.js";
 
 const app = express();
 
 app.use(assignRequestId);
+app.use(loggerMiddleware);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
