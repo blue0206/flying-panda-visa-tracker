@@ -2,9 +2,11 @@ import express from "express";
 import type { Request, Response } from "express";
 import cors from "cors";
 import { ApiResponse } from "./types/api.js";
+import assignRequestId from "./middlewares/assignRequestId.js";
 
 const app = express();
 
+app.use(assignRequestId);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
