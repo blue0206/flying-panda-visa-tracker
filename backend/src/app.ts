@@ -73,3 +73,15 @@ process.on("SIGINT", async () => {
 process.on("SIGTERM", async () => {
   await gracefulShutdown("SIGTERM");
 });
+
+// Global Exception/Rejection Handlers
+process.on("uncaughtException", (err) => {
+  logger.fatal({ err }, "Uncaught exception.");
+  process.exit(1);
+});
+process.on("unhandledRejection", async (reason, promise) => {
+  logger.fatal({ reason, promise }, "Unhandled rejection.");
+
+  await gracefulShutdown("SIGTERM");
+  process.exit(1);
+});
