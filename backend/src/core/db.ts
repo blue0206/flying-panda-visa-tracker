@@ -1,16 +1,17 @@
 import mongoose from "mongoose";
 import { MongooseError } from "mongoose";
 import { envConfig } from "./config.js";
+import { logger } from "./logger.js";
 
 const connectMongo = async () => {
   try {
     await mongoose.connect(envConfig.DATABASE_URL);
-    console.log("MongoDB client connected.");
+    logger.info("MongoDB client connected.");
   } catch (err: unknown) {
     if (err instanceof MongooseError) {
-      console.error(err.message);
+      logger.error(err.message);
     } else {
-      console.error(err);
+      logger.error(err);
     }
     process.exit(1);
   }
@@ -19,12 +20,12 @@ const connectMongo = async () => {
 const disconnectMongo = async () => {
   try {
     await mongoose.connection.close(false);
-    console.log("MongoDB client disconnected.");
+    logger.info("MongoDB client disconnected.");
   } catch (err: unknown) {
     if (err instanceof MongooseError) {
-      console.error(err.message);
+      logger.error(err.message);
     } else {
-      console.error(err);
+      logger.error(err);
     }
   }
 };
