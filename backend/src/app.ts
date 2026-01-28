@@ -4,10 +4,12 @@ import express from "express";
 import type { Request, Response } from "express";
 import cors from "cors";
 import { ApiResponse } from "./types/api.js";
+import { connectMongo, disconnectMongo } from "./core/db.js";
 import assignRequestId from "./middlewares/assignRequestId.js";
 import { loggerMiddleware } from "./middlewares/loggerMiddleware.js";
 import { logger } from "./core/logger.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import { Server } from "http";
 
 const app = express();
 
@@ -30,6 +32,44 @@ app.use("/api/v1/healthcheck", (_req: Request, res: Response) => {
 // Error Middleware
 app.use(errorHandler);
 
-app.listen(envConfig.PORT, async () => {
+const server: Server = app.listen(envConfig.PORT, async () => {
+  await connectMongo();
   logger.info(`Server running on port: ${envConfig.PORT}`);
+});
+
+let shuttingDown = false;
+
+async function gracefulShutdown(signal: NodeJS.Signals): Promise<void> {
+  if (shuttingDown) {
+    logger.warn(`Already shutting down. Ignoring signal: ${signal}`);
+  }
+  shuttingDown = true;
+  logger.warn(`Received signal: ${signal}. Gracefully shutting down.`);
+
+  server.close(async (err) => {
+    if (err) {
+      logger.error({ err }, "Error shutting down the server.");
+      process.exitCode = 1;
+    } else {
+      logger.info("Server shut down successfully.");
+    }
+
+    await disconnectMongo();
+
+    logger.info("Graceful shutdown complete. Exiting.");
+    process.exit();
+  });
+
+  const shutdownTimeout = 11000;
+  setTimeout(() => {
+    logger.error(`Graceful shutdown timed out after 11 seconds. Forcing exit.`);
+    process.exit(1);
+  }, shutdownTimeout).unref();
+}
+
+process.on("SIGINT", async () => {
+  await gracefulShutdown("SIGINT");
+});
+process.on("SIGTERM", async () => {
+  await gracefulShutdown("SIGTERM");
 });
