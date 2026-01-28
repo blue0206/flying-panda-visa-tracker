@@ -7,6 +7,7 @@ import { ApiResponse } from "./types/api.js";
 import assignRequestId from "./middlewares/assignRequestId.js";
 import { loggerMiddleware } from "./middlewares/loggerMiddleware.js";
 import { logger } from "./core/logger.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
 
@@ -25,6 +26,9 @@ app.use("/api/v1/healthcheck", (_req: Request, res: Response) => {
 
   res.status(200).json(data);
 });
+
+// Error Middleware
+app.use(errorHandler);
 
 app.listen(envConfig.PORT, async () => {
   logger.info(`Server running on port: ${envConfig.PORT}`);
