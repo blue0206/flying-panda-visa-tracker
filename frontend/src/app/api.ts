@@ -5,6 +5,7 @@ import type {
   GetAlertsResponseDTO,
   AlertType,
   AlertRequestDTO,
+  UpdateAlertType,
 } from "../types/api";
 import z from "zod";
 
@@ -37,6 +38,14 @@ export const apiSlice = createApi({
         url: `/alerts`,
         method: "POST",
         body: data,
+      }),
+      invalidatesTags: ["Alerts"],
+    }),
+    updateAlert: build.mutation<AlertType, UpdateAlertType>({
+      query: ({ body, id }: UpdateAlertType) => ({
+        url: `/alerts/${id}`,
+        method: "PUT",
+        body,
       }),
       invalidatesTags: ["Alerts"],
     }),
