@@ -1,10 +1,11 @@
-import { AlertQueryDTO } from "../models/alert.dto.js";
 import { alertService } from "../services/alert.service.js";
 import {
   ApiError,
   ApiResponse,
   GetAlertResponsePayload,
 } from "../types/api.js";
+import type { Alert } from "../types/alert.js";
+import type { AlertDTO, AlertQueryDTO } from "../models/alert.dto.js";
 import type { Request, Response } from "express";
 
 export const getAlerts = async (
@@ -33,6 +34,25 @@ export const getAlerts = async (
 
     res.status(200).json(data);
   } catch (error: unknown) {
+    throw new ApiError(500, error);
+  }
+};
+
+export const createAlert = async (
+  req: Request<unknown, unknown, AlertDTO>,
+  res: Response,
+): Promise<void> => {
+  try {
+    const data = await alertService.addAlert(req.body);
+
+    const response: ApiResponse<Alert> = {
+      success: true,
+      statusCode: 201,
+      payload: { ...data },
+    };
+
+    res.status(201).json(response);
+  } catch (error) {
     throw new ApiError(500, error);
   }
 };
