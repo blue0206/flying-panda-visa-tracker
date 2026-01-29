@@ -18,7 +18,7 @@ export const apiSlice = createApi({
   tagTypes: ["Alerts"],
   endpoints: (build) => ({
     getAlerts: build.query<GetAlertsResponseDTO, string>({
-      query: (queryArgs) => ({
+      query: (queryArgs: string) => ({
         url: `/alerts${queryArgs}`,
         method: "GET",
       }),
@@ -46,6 +46,13 @@ export const apiSlice = createApi({
         url: `/alerts/${id}`,
         method: "PUT",
         body,
+      }),
+      invalidatesTags: ["Alerts"],
+    }),
+    deleteAlert: build.mutation<void, string>({
+      query: (id: string) => ({
+        url: `/alerts/${id}`,
+        method: "DELETE",
       }),
       invalidatesTags: ["Alerts"],
     }),
