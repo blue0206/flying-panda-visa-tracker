@@ -59,4 +59,9 @@ export const apiSlice = createApi({
   }),
 });
 
-export const { useGetAlertsQuery } = apiSlice;
+export const {
+  useGetAlertsQuery,
+  useCreateAlertMutation,
+  useUpdateAlertMutation,
+  useDeleteAlertMutation,
+} = apiSlice;
