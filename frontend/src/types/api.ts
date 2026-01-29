@@ -17,7 +17,7 @@ export const AlertRequestSchema = z.object({
     error: "Status must be one of: Active, Booked, Expired.",
   }),
 });
-export type AlertRequestDTO = z.infer<typeof AlertSchema>;
+export type AlertRequestDTO = z.infer<typeof AlertRequestSchema>;
 
 // Alert Schema for alert object returned from backend.
 export const AlertSchema = z.object({
