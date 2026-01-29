@@ -1,8 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import {
-  GetAlertsResponseSchema,
-  type ApiResponse,
-  type GetAlertsResponseDTO,
+import { GetAlertsResponseSchema } from "../types/api";
+import type {
+  ApiResponse,
+  GetAlertsResponseDTO,
+  AlertType,
+  AlertRequestDTO,
 } from "../types/api";
 import z from "zod";
 
@@ -29,6 +31,14 @@ export const apiSlice = createApi({
         return parsedResult.data;
       },
       providesTags: ["Alerts"],
+    }),
+    createAlert: build.mutation<AlertType, AlertRequestDTO>({
+      query: (data: AlertRequestDTO) => ({
+        url: `/alerts`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Alerts"],
     }),
   }),
 });
