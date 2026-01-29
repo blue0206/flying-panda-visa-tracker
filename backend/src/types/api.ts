@@ -1,3 +1,5 @@
+import { Alert } from "./alert.js";
+
 export interface ApiResponse<PayloadType> {
   success: boolean;
   statusCode: number;
@@ -15,3 +17,15 @@ export class ApiError<PayloadType> extends Error {
     this.payload = payload;
   }
 }
+
+// Response Payload interface for GET /alerts
+export interface GetAlertResponsePayload {
+  data: Alert[];
+  pagination: Pagination;
+}
+type Pagination = {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+};
