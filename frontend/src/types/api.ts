@@ -47,3 +47,9 @@ export const GetAlertsResponseSchema = z.object({
   pagination: PaginationSchema,
 });
 export type GetAlertsResponseDTO = z.infer<typeof GetAlertsResponseSchema>;
+
+// Query type for updateAlert endpoint.
+export interface UpdateAlertType {
+  body: AlertRequestDTO;
+  id: string;
+}
