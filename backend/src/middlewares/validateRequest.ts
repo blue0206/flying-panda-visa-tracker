@@ -11,7 +11,11 @@ interface ValidationArgsType {
 
 const validateRequest =
   (args: ValidationArgsType) =>
-  async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
+  async (
+    req: Request<unknown, unknown, unknown, unknown>,
+    _res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     // Parse all in parallel.
     const [body, params, query] = await Promise.all([
       args.bodySchema ? args.bodySchema.safeParseAsync(req.body) : null,
