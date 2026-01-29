@@ -9,6 +9,7 @@ import assignRequestId from "./middlewares/assignRequestId.js";
 import { loggerMiddleware } from "./middlewares/loggerMiddleware.js";
 import { logger } from "./core/logger.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import alertRouter from "./routes/alert.routes.js";
 import { Server } from "http";
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/api/v1/alerts", alertRouter);
 app.use("/api/v1/healthcheck", (_req: Request, res: Response) => {
   const data: ApiResponse<string> = {
     success: true,
