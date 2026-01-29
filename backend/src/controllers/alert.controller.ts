@@ -84,3 +84,28 @@ export const updateAlert = async (
     throw new ApiError(500, error);
   }
 };
+
+export const deleteAlert = async (
+  req: Request<AlertParamsDTO>,
+  res: Response,
+): Promise<void> => {
+  try {
+    await alertService.deleteAlert(req.params.alertId);
+
+    const response: ApiResponse<null> = {
+      success: true,
+      statusCode: 204,
+      payload: null,
+    };
+
+    res.status(204).json(response);
+  } catch (error) {
+    if (error instanceof ApiError) {
+      // For the error we threw from service.
+      throw error;
+    }
+
+    // For other DB-related errors.
+    throw new ApiError(500, error);
+  }
+};
