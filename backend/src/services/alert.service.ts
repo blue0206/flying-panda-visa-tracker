@@ -6,7 +6,7 @@ import type {
 } from "../types/alert.js";
 import { ApiError } from "../types/api.js";
 
-export class AlertService {
+class AlertService {
   async getAlertsWithPaginationAndFilter(
     page: number,
     limit: number,
@@ -48,3 +48,5 @@ export class AlertService {
     }
   }
 }
+
+export const alertService = new AlertService();
