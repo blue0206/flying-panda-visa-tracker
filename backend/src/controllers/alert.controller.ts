@@ -5,7 +5,11 @@ import {
   GetAlertResponsePayload,
 } from "../types/api.js";
 import type { Alert } from "../types/alert.js";
-import type { AlertDTO, AlertQueryDTO } from "../models/alert.dto.js";
+import type {
+  AlertDTO,
+  AlertParamsDTO,
+  AlertQueryDTO,
+} from "../models/alert.dto.js";
 import type { Request, Response } from "express";
 
 export const getAlerts = async (
@@ -53,6 +57,30 @@ export const createAlert = async (
 
     res.status(201).json(response);
   } catch (error) {
+    throw new ApiError(500, error);
+  }
+};
+
+export const updateAlert = async (
+  req: Request<AlertParamsDTO, unknown, AlertDTO>,
+  res: Response,
+): Promise<void> => {
+  try {
+    const data = await alertService.updateAlert(req.params.alertId, req.body);
+
+    const response: ApiResponse<Alert> = {
+      success: true,
+      statusCode: 200,
+      payload: { ...data },
+    };
+
+    res.status(200).json(response);
+  } catch (error) {
+    if (error instanceof ApiError) {
+      // For the error we threw from service.
+      throw error;
+    }
+    // For other DB-related errors.
     throw new ApiError(500, error);
   }
 };
