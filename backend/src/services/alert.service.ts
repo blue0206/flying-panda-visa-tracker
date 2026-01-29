@@ -1,15 +1,32 @@
+import { AlertQueryDTO } from "../models/alert.dto.js";
 import alertModel from "../models/alert.model.js";
-import type { AlertInDB } from "../types/alert.js";
+import type {
+  AlertInDB,
+  AlertsWithPaginationAndFilter,
+} from "../types/alert.js";
 import { ApiError } from "../types/api.js";
 
 export class AlertService {
-  async getAllAlerts(): Promise<AlertInDB[]> {
-    return await alertModel.find();
+  async getAlertsWithPaginationAndFilter(
+    page: number,
+    limit: number,
+    filters: Partial<AlertQueryDTO>,
+  ): Promise<AlertsWithPaginationAndFilter> {
+    const skip = (page - 1) * limit;
+
+    const [alerts, total] = await Promise.all([
+      alertModel.find(filters).skip(skip).limit(limit),
+      alertModel.countDocuments(filters),
+    ]);
+
+    return {
+      alerts,
+      total,
+    };
   }
 
   async addAlert(data: Partial<AlertInDB>): Promise<AlertInDB> {
     const newEntry = new alertModel(data);
-
     return await newEntry.save();
   }
 

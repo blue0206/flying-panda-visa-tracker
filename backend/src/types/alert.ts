@@ -7,3 +7,8 @@ export interface AlertInDB extends Document {
   visaType: "Tourist" | "Business" | "Student";
   status: "Active" | "Booked" | "Expired";
 }
+
+export interface AlertsWithPaginationAndFilter {
+  alerts: AlertInDB[];
+  total: number;
+}
