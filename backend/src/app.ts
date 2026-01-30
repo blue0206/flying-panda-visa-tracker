@@ -44,6 +44,7 @@ let shuttingDown = false;
 async function gracefulShutdown(signal: NodeJS.Signals): Promise<void> {
   if (shuttingDown) {
     logger.warn(`Already shutting down. Ignoring signal: ${signal}`);
+    return;
   }
   shuttingDown = true;
   logger.warn(`Received signal: ${signal}. Gracefully shutting down.`);
