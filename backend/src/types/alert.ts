@@ -6,6 +6,7 @@ export interface Alert {
   city: string;
   visaType: "Tourist" | "Business" | "Student";
   status: "Active" | "Booked" | "Expired";
+  createdAt: Date;
 }
 
 export interface AlertInDB extends Alert, Document {}
