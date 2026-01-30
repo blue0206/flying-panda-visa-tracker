@@ -4,7 +4,7 @@ import {
   ApiResponse,
   GetAlertResponsePayload,
 } from "../types/api.js";
-import type { Alert } from "../types/alert.js";
+import type { Alert, AlertInDB } from "../types/alert.js";
 import type {
   AlertDTO,
   AlertParamsDTO,
@@ -26,7 +26,16 @@ export const getAlerts = async (
       success: true,
       statusCode: 200,
       payload: {
-        data: alerts,
+        data: alerts.map(
+          (alert: AlertInDB): Alert => ({
+            id: alert.id,
+            country: alert.country,
+            city: alert.city,
+            visaType: alert.visaType,
+            status: alert.status,
+            createdAt: alert.createdAt,
+          }),
+        ),
         pagination: {
           page,
           limit,
@@ -52,7 +61,14 @@ export const createAlert = async (
     const response: ApiResponse<Alert> = {
       success: true,
       statusCode: 201,
-      payload: { ...data },
+      payload: {
+        id: data.id,
+        country: data.country,
+        city: data.city,
+        visaType: data.visaType,
+        status: data.status,
+        createdAt: data.createdAt,
+      },
     };
 
     res.status(201).json(response);
@@ -71,7 +87,14 @@ export const updateAlert = async (
     const response: ApiResponse<Alert> = {
       success: true,
       statusCode: 200,
-      payload: { ...data },
+      payload: {
+        id: data.id,
+        country: data.country,
+        city: data.city,
+        visaType: data.visaType,
+        status: data.status,
+        createdAt: data.createdAt,
+      },
     };
 
     res.status(200).json(response);
