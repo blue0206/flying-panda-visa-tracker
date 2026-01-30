@@ -30,6 +30,7 @@ export const AlertSchema = z.object({
   status: z.enum(["Active", "Booked", "Expired"], {
     error: "Status is invalid.",
   }),
+  createdAt: z.date(),
 });
 export type AlertType = z.infer<typeof AlertSchema>;
 
