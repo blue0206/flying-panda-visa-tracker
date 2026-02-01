@@ -1,3 +1,9 @@
+echo "Installing backend dependencies...."
+(cd ./backend && npm install)
+
+echo "Installing frontend dependencies...."
+(cd ./frontend && npm install)
+
 echo "Starting Docker Compose...."
 docker-compose up -d
 
